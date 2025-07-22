@@ -15,6 +15,5 @@ struct BookwormApp: App {
             ContentView()
         }
         .modelContainer(for: Book.self)
-        .modelContainer(for: Student.self)
     }
 }
