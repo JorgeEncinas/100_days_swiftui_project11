@@ -13,6 +13,14 @@ struct DetailView : View {
     // now requires them to have a view Context to create it inside.
     // If you create a SwiftData model object without a container around
     //  it is likely to crash
+    @Environment(\.modelContext) var modelContext
+    @Environment(\.dismiss) var dismiss
+    @State private var showingDeleteAlert = false
+    
+    func deleteBook() {
+        modelContext.delete(book)
+        dismiss()
+    }
     
     var body : some View {
         ScrollView {
@@ -44,6 +52,17 @@ struct DetailView : View {
         .navigationTitle(book.title)
         .navigationBarTitleDisplayMode(.inline)
         .scrollBounceBehavior(.basedOnSize)
+        .alert("Delete book", isPresented: $showingDeleteAlert) {
+            Button("Delete", role: .destructive, action: deleteBook)
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Are you sure?")
+        }
+        .toolbar {
+            Button("Delete this book", systemImage: "trash") {
+                showingDeleteAlert = true
+            }
+        }
     }
 }
 
