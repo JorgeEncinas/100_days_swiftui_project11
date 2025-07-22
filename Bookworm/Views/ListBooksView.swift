@@ -8,6 +8,7 @@ import SwiftUI
 
 struct ListBooksView : View {
     var books : [Book]
+    let deleteBooks : (_ offsets: IndexSet) -> Void
     
     var body : some View {
         List {
@@ -27,6 +28,9 @@ struct ListBooksView : View {
                     }
                 }
             }
+            .onDelete { (offsets : IndexSet) in
+                deleteBooks(offsets)
+            }
         }
     }
 }
@@ -43,7 +47,10 @@ struct ListBooksView : View {
             title: "Example3", author: "Person3", genre: "Horror", review: "ok i guess", rating: 5
         )
     ]
+    let deleteOffsets : (_ offsets : IndexSet) -> Void = { offset in
+        print("Done")
+    }
     NavigationStack {
-        ListBooksView(books: books)
+        ListBooksView(books: books, deleteBooks: deleteOffsets)
     }
 }
