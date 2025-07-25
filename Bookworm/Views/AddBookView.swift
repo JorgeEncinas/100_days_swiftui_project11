@@ -16,6 +16,9 @@ struct AddBookView : View {
     @State private var review = ""
     let genres = ["Fantasy", "Horror", "Kids", "Mystery", "Poetry", "Romance", "Thriller"]
     
+    @State private var presentingValidationAlert = false
+    
+    
     var body : some View {
         NavigationStack {
             Form {
@@ -43,20 +46,49 @@ struct AddBookView : View {
                 
                 Section {
                     Button("Save") {
-                        let newBook = Book(
-                            title: title,
-                            author: author,
-                            genre: genre,
-                            review: review,
-                            rating: rating
-                        )
-                        modelContext.insert(newBook)
-                        dismiss()
+                        if(isBookValid()) {
+                            let newBook = Book(
+                                title: title,
+                                author: author,
+                                genre: genre,
+                                review: review,
+                                rating: rating
+                            )
+                            modelContext.insert(newBook)
+                            dismiss()
+                        } else {
+                            presentingValidationAlert.toggle()
+                        }
+                        
                     }
                 }
             }
             .navigationTitle("Add Book")
+            .alert("Book not valid", isPresented: $presentingValidationAlert) {
+                Button("OK") {}
+            } message: {
+                Text("Please make sure you add a title, author, and a valid genre.")
+            }
         }
+    }
+    
+    func isBookValid() -> Bool {
+        if (isStringValid(title) &&
+            isStringValid(author) &&
+            //isStringValid(review) &&
+            isStringValid(genre)) {
+            return true
+        }
+        return false
+    }
+    
+    func isStringValid(_ target : String) -> Bool {
+        let trimmedTarget = target.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if trimmedTarget.isEmpty {
+             return false //Not valid
+        }
+        return true // Valid
     }
 }
 

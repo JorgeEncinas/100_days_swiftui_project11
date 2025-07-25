@@ -42,8 +42,14 @@ struct DetailView : View {
                 .font(.title)
                 .foregroundStyle(.secondary)
             
-            Text(book.review)
-                .padding()
+            VStack {
+                Text(book.date.formatted(date: .long, time: .omitted))
+                    .padding(.top, 10)
+                    .foregroundStyle(.secondary)
+                Text(book.review)
+                    .padding([.bottom, .horizontal])
+            }
+
             
             RatingView(rating: .constant(book.rating))
                 .font(.largeTitle)

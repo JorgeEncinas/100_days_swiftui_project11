@@ -21,6 +21,7 @@ struct ListBooksView : View {
                         VStack(alignment: .leading) {
                             Text(book.title)
                                 .font(.headline)
+                                .foregroundStyle(book.rating < 2 ? .red : .primary)
                             
                             Text(book.author)
                                 .foregroundStyle(.secondary)
